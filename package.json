@@ -26,6 +26,7 @@
   "homepage": "https://github.com/sendanor/nor-exec",
   "dependencies": {
     "q": ">= 1.0.1 <1.1.0",
+    "merge": ">= 1.1.2 <1.2.0",
     "nor-debug": ">= 0.1.32 < 0.2.0"
   },
   "devDependencies": {
