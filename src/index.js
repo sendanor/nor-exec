@@ -23,10 +23,17 @@ module.exports = function spawnProcess(command, args, options) {
 	options.detached = true;
 	options.stdio = ["ignore", "ignore", "pipe"];
 
+	var stdout = '';
 	var stderr = '';
 
 	// Run the process
 	var proc = require('child_process').spawn(command, args, options);
+
+	proc.stdout.setEncoding('utf8');
+	proc.stdout.on('data', function(data) {
+		stdout += data;
+	});
+
 	proc.stderr.setEncoding('utf8');
 	proc.stderr.on('data', function(data) {
 		stderr += data;
@@ -35,9 +42,9 @@ module.exports = function spawnProcess(command, args, options) {
 	// Handle exit
 	proc.on('close', function(retval) {
 		if (retval === 0) {
-			defer.resolve(retval);
+			defer.resolve({"retval": retval, "stdout": stdout, "stderr": stderr});
 		} else {
-			defer.reject({"retval": retval, "stderr": stderr});
+			defer.reject({"retval": retval, "stdout": stdout, "stderr": stderr});
 		}
 	});
 
