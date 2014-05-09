@@ -13,9 +13,11 @@ module.exports = function spawnProcess(command, args, options) {
 	options = options || {};
 	var defer = Q.defer();
 
-	debug.log('command = ', command);
-	debug.log('args = ', args);
-	debug.log('options = ', options);
+	if(process.env.NOR_EXEC_DEBUG !== undefined) {
+		debug.log('command = ', command);
+		debug.log('args = ', args);
+		debug.log('options = ', options);
+	}
 
 	options.env = merge(process.env, options.env || {});
 	options.detached = true;
