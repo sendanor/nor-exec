@@ -21,7 +21,7 @@ module.exports = function spawnProcess(command, args, options) {
 
 	options.env = merge(process.env, options.env || {});
 	options.detached = true;
-	options.stdio = ["ignore", "ignore", "pipe"];
+	options.stdio = ["ignore", "pipe", "pipe"];
 
 	var stdout = '';
 	var stderr = '';
