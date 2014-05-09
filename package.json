@@ -1,0 +1,35 @@
+{
+  "name": "nor-exec",
+  "version": "0.1.0",
+  "description": "Execute shell commands in Node.js with Promises",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "npm run test-spec",
+    "test-dot": "mocha -t 30000 -u bdd -c -R dot tests/test-*.js",
+    "test-list": "mocha -t 30000 -u bdd -c -R list tests/test-*.js",
+    "test-spec": "mocha -t 30000 -u bdd -c -R spec tests/test-*.js",
+    "test-progress": "mocha -t 30000 -u bdd -c -R progress tests/test-*.js",
+    "test-min": "mocha -t 30000 -u bdd -c -R min tests/test-*.js",
+    "test-markdown": "mocha -t 30000 -u bdd -c -R markdown tests/test-*.js",
+    "build-tests.md": "npm run test-markdown > tests.md",
+    "lint": "node-lint src/ --config=lint.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/sendanor/nor-exec.git"
+  },
+  "author": "Sendanor <info@sendanor.fi>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sendanor/nor-exec/issues"
+  },
+  "homepage": "https://github.com/sendanor/nor-exec",
+  "dependencies": {
+    "q": ">= 1.0.1 <1.1.0",
+    "nor-debug": ">= 0.1.32 < 0.2.0"
+  },
+  "devDependencies": {
+    "lint": ">= 1.1.2 <1.2.0",
+    "mocha": ">= 1.16.2 <1.17.0"
+  }
+}
