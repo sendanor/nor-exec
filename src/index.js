@@ -9,8 +9,9 @@ var debug = require('nor-debug');
 /**
  * Return promise of a spawned command
  */
-module.exports = function spawnProcess(command, args, options) {
+module.exports = function spawnProcess(command, args, options, traits) {
 	options = options || {};
+	traits = traits || {};
 	var defer = Q.defer();
 
 	if(process.env.NOR_EXEC_DEBUG !== undefined) {
@@ -21,7 +22,12 @@ module.exports = function spawnProcess(command, args, options) {
 
 	options.env = merge(process.env, options.env || {});
 	options.detached = true;
-	options.stdio = ["ignore", "pipe", "pipe"];
+
+	if(!options.stdio) {
+		traits.stdout = true;
+		traits.stderr = true;
+		options.stdio = ["ignore", "pipe", "pipe"];
+	}
 
 	var stdout = '';
 	var stderr = '';
@@ -29,15 +35,23 @@ module.exports = function spawnProcess(command, args, options) {
 	// Run the process
 	var proc = require('child_process').spawn(command, args, options);
 
-	proc.stdout.setEncoding('utf8');
-	proc.stdout.on('data', function(data) {
-		stdout += data;
-	});
+	if(traits.unref) {
+		proc.unref();
+	}
 
-	proc.stderr.setEncoding('utf8');
-	proc.stderr.on('data', function(data) {
-		stderr += data;
-	});
+	if(traits.stdout) {
+		proc.stdout.setEncoding('utf8');
+		proc.stdout.on('data', function(data) {
+			stdout += data;
+		});
+	}
+
+	if(traits.stderr) {
+		proc.stderr.setEncoding('utf8');
+		proc.stderr.on('data', function(data) {
+			stderr += data;
+		});
+	}
 
 	// Handle exit
 	proc.on('close', function(retval) {

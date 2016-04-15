@@ -1,6 +1,6 @@
 {
   "name": "nor-exec",
-  "version": "0.1.17",
+  "version": "0.1.18",
   "description": "Execute shell commands in Node.js with Promises",
   "main": "src/index.js",
   "scripts": {
