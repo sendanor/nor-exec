@@ -38,10 +38,6 @@ module.exports = function spawnProcess(command, args, options, traits) {
 	// Run the process
 	var proc = require('child_process').spawn(command, args, options);
 
-	if(traits.unref) {
-		proc.unref();
-	}
-
 	if(traits.stdout) {
 		proc.stdout.setEncoding('utf8');
 		proc.stdout.on('data', function(data) {
@@ -57,9 +53,7 @@ module.exports = function spawnProcess(command, args, options, traits) {
 	}
 
 	// Handle exit
-	if(options.detached && traits.unref) {
-		defer.resolve("Command started detached and unref enabled; not waiting for it to finish.");
-	} else {
+	if(!(options.detached && traits.unref)) {
 		proc.on('close', function(retval) {
 			if (retval === 0) {
 				defer.resolve({"retval": retval, "stdout": stdout, "stderr": stderr});
@@ -72,6 +66,18 @@ module.exports = function spawnProcess(command, args, options, traits) {
 		proc.on('error', function(err){
 			defer.reject(err);
 		});
+	}
+
+	if(traits.disconnect && proc.connected) {
+		proc.disconnect();
+	}
+
+	if(traits.unref) {
+		proc.unref();
+	}
+
+	if(options.detached && traits.unref) {
+		defer.resolve("Command started detached and unref enabled; not waiting for it to finish.");
 	}
 
 	return defer.promise;
