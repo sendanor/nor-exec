@@ -21,7 +21,10 @@ module.exports = function spawnProcess(command, args, options, traits) {
 	}
 
 	options.env = merge(process.env, options.env || {});
-	options.detached = true;
+
+	if(options.detached === undefined) {
+		options.detached = true;
+	}
 
 	if(!options.stdio) {
 		traits.stdout = true;
@@ -54,18 +57,22 @@ module.exports = function spawnProcess(command, args, options, traits) {
 	}
 
 	// Handle exit
-	proc.on('close', function(retval) {
-		if (retval === 0) {
-			defer.resolve({"retval": retval, "stdout": stdout, "stderr": stderr});
-		} else {
-			defer.reject({"retval": retval, "stdout": stdout, "stderr": stderr});
-		}
-	});
+	if(options.detached && traits.unref) {
+		defer.resolve("Command started detached and unref enabled; not waiting for it to finish.");
+	} else {
+		proc.on('close', function(retval) {
+			if (retval === 0) {
+				defer.resolve({"retval": retval, "stdout": stdout, "stderr": stderr});
+			} else {
+				defer.reject({"retval": retval, "stdout": stdout, "stderr": stderr});
+			}
+		});
 
-	// Handle error
-	proc.on('error', function(err){
-		defer.reject(err);
-	});
+		// Handle error
+		proc.on('error', function(err){
+			defer.reject(err);
+		});
+	}
 
 	return defer.promise;
 };
