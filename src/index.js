@@ -3,7 +3,7 @@
 "use strict";
 
 var Q = require('q');
-var merge = require('merge');
+var _ = require('lodash');
 var debug = require('nor-debug');
 
 /**
@@ -20,7 +20,7 @@ module.exports = function spawnProcess(command, args, options, traits) {
 		debug.log('options = ', options);
 	}
 
-	options.env = merge(process.env, options.env || {});
+	options.env = _.merge({}, process.env, options.env || {});
 
 	if(options.detached === undefined) {
 		options.detached = true;
