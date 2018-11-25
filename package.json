@@ -1,6 +1,6 @@
 {
   "name": "nor-exec",
-  "version": "0.2.0",
+  "version": "1.0.1",
   "description": "Execute shell commands in Node.js with Promises",
   "main": "src/index.js",
   "scripts": {
@@ -26,11 +26,11 @@
   "homepage": "https://github.com/sendanor/nor-exec",
   "dependencies": {
     "lodash": "^4.17.11",
-    "nor-debug": ">= 0.1.55 < 0.2.0",
     "q": ">= 1.0.1  < 1.1.0"
   },
   "devDependencies": {
+    "nor-debug": "^1.0.1",
     "lint": ">= 1.1.2 <1.2.0",
-    "mocha": ">= 1.16.2 <1.17.0"
+    "mocha": "^5.2.0"
   }
 }
